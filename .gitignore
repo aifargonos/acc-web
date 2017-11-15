@@ -1,0 +1,14 @@
+*.db
+.DS_Store
+.idea
+.project
+.pydevproject
+.settings
+venv
+.venv
+env
+.env
+__pycache__
+.cache
+dev
+/web/static/admin

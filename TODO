@@ -1,0 +1,30 @@
+
+
+
+Timezone
+	
+	Uses UTC even when USE_TZ = False !!!
+	Probably because server time is in UTC .: check settings of nginx :-P
+	
+	Simply set the timezone in the settings :-P
+		Check out how it really works .:
+			create records under both settings
+			export the database and check the data
+			import different data and view it under the both settings
+			
+			datetime is stored in the database in UTC
+		So the setting TIME_ZONE shall be the time zone in which I work, when I travel, I change it
+		And all the datetimes shall be stored in UTC, so they'll be objective :-P
+
+
+
+export the old database and import it into the new one
+
+
+
+make the dev docker work with port 8080
+	
+	redirects always ifnore the port
+
+
+
