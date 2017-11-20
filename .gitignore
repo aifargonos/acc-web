@@ -8,7 +8,9 @@ venv
 .venv
 env
 .env
+*.py[cod]
 __pycache__
 .cache
 dev
 /web/static/admin
+/web/db.sqlite3

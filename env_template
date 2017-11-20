@@ -3,6 +3,7 @@
 
 
 SECRET_KEY=3+c0f_do%yrca+%l$i+xr^^fh42fy*#fd!zz45me6r64-icbi(
+DB_ENGINE=django.db.backends.postgresql_psycopg2
 DB_NAME=postgresname
 DB_USER=postgresuser
 DB_PASS=postgrespass
