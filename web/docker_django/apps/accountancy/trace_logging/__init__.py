@@ -1,5 +1,6 @@
 # TODO: [trace] module description
-# FIXME: [trace] there should be a trace formatter; normal formatter fails if it has %(indent) and receives a message from normal logger.
+# FIXME: [trace] there should be a trace formatter; normal formatter fails if it has %(indent) and receives a message from normal logger. Also single_indent should be a parameter of this trace formatter.
+# TODO: [trace] trace_level should be specified when the logger is used as a decorator and not in getLogger!
 """
 A trace logger can be used as a decorator
 that will log calling and exiting the function.
@@ -27,8 +28,9 @@ _srcfile = os.path.normcase(currentframe.__code__.co_filename)
 
 class BeforeAfter(object):
 	"""
-	A decorator that calls "before" before calling the underlying function and
-	"after" after the call.
+	A decorator that calls "before" before calling the underlying function,
+	"after" after the call, and "on_exc" when the function is exiting because
+	an unhandled exception was raised in it.
 	
 	Arguments passed to "before" are:
 		"name" = name of the underlying function,
@@ -42,19 +44,31 @@ class BeforeAfter(object):
 		"module" = module of the underlying function,
 		"args" = *args passed to the underlying function
 		"kwargs" = **kwargs passed to the underlying function
+	
+	Arguments passed to "on_exc" are:
+		"exception" = the exception that was raised in the function,
+		"name" = name of the underlying function,
+		"module" = module of the underlying function,
+		"args" = *args passed to the underlying function
+		"kwargs" = **kwargs passed to the underlying function
 	"""
 	
-	def __init__(self, before, after):
+	def __init__(self, before, after, on_exc):
 		self._before = before
 		self._after = after
+		self._on_exc = on_exc
 	
 	def __call__(self, f):
 		
 		def result(*args, **kwargs):
 			self._before(name=f.__name__, module=f.__module__, args=args, kwargs=kwargs)
-			r = f(*args, **kwargs)
-			self._after(result=r, name=f.__name__, module=f.__module__, args=args, kwargs=kwargs)
-			return r
+			try:
+				r = f(*args, **kwargs)
+				self._after(result=r, name=f.__name__, module=f.__module__, args=args, kwargs=kwargs)
+				return r
+			except:
+				self._on_exc(exception=sys.exc_info()[1], name=f.__name__, module=f.__module__, args=args, kwargs=kwargs)
+				raise
 		
 		return result
 	
@@ -84,7 +98,9 @@ class TraceLogger(logging.Logger, BeforeAfter):
 		logging.Logger.__init__(self, name, level)
 		BeforeAfter.__init__(self,
 			lambda *args, **kwargs: self._log_before(*args, **kwargs),
-			lambda *args, **kwargs: self._log_after(*args, **kwargs))
+			lambda *args, **kwargs: self._log_after(*args, **kwargs),
+			lambda *args, **kwargs: self._log_exc(*args, **kwargs),
+		)
 		self._trace_level = trace_level
 		self._ind_count = 0
 		self.single_indent = single_indent
@@ -165,19 +181,33 @@ class TraceLogger(logging.Logger, BeforeAfter):
 					"traced_args": args,
 					"traced_kwargs": kwargs})
 	
+	def _log_exc(self, exception, name, module, args, kwargs):
+		if not self.isEnabledFor(self._trace_level):
+			return
+		# else
+		self.log(self._trace_level, "exception raised in %s.%s: %s" % (module, name, exception),
+				extra={"add_indent": -1,
+					"traced_exception": exception,
+					"traced_name": name,
+					"traced_module": module,
+					"traced_args": args,
+					"traced_kwargs": kwargs})
+	
 	pass
 
 
 
-def getTraceLogger(name=None, trace_level=logging.DEBUG, single_indent="  "):
+def getTraceLogger(name=None, trace_level=None, single_indent=None):
 	logging._acquireLock()
 	try:
 		oldClass = logging.getLoggerClass()
 		logging.setLoggerClass(TraceLogger)
 		result = logging.getLogger(name)
 		logging.setLoggerClass(oldClass)
-		result.single_indent = single_indent
-		result.setTraceLevel(trace_level)
+		if single_indent is not None:
+			result.single_indent = single_indent
+		if trace_level is not None:
+			result.setTraceLevel(trace_level)
 		return result
 	finally:
 		logging._releaseLock()

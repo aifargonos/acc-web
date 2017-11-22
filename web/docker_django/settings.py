@@ -123,7 +123,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'trace_formatter': {
-            'format': "%(asctime)s [%(levelname)-10s] %(indent)s%(message)s"
+            'format': "%(asctime)s %(levelname)-10s | %(indent)s%(message)s"
         },
     },
     'handlers': {

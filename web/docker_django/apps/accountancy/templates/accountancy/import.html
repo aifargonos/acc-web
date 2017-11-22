@@ -1,0 +1,23 @@
+{% extends "accountancy/base.html" %}
+
+
+{% block content %}
+
+<div class="text-center">
+  <p>Import from provided file.</p>
+</div>
+
+<br>
+
+<form action="{% url 'accountancy:import_view' %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="Submit" />
+</form>
+
+<hr>
+
+log:
+<pre>{{ log }}</pre>
+
+{% endblock content %}
