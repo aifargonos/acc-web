@@ -30,10 +30,8 @@ def import_view(request):
             logger = logging.getLogger("accountancy.imports")
             logger.addHandler(handler)
             
-            # TODO: the whole input_file should act as a file, input_file.file shouldn't need to be accessed.
-            # Update Django to 1.11.7 !!! recent django.core.files.utils.FileProxyMixin has property readable
             try:
-                method.func(input_file.file, account=account, dont_save=False)
+                method.func(input_file, account=account, dont_save=False)
             except:
                 # Exceptions should be logged.
                 pass
