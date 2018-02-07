@@ -1,0 +1,20 @@
+{% extends "base/base.html" %}
+
+
+{% block title %}Index{% endblock title %}
+
+
+{% block content %}
+
+<h1>Index</h1>
+
+This is a small containing serving mainly:
+<ul>
+<li><a href="{% url 'accountancy:index' %}">Accountancy</a></li>
+<li><a href="{% url 'admin:index' %}">Admin</a></li>
+</ul>
+
+Still heavily under construction ...
+
+{% endblock content %}
+
