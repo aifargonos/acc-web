@@ -118,6 +118,10 @@ STATIC_URL = '/static/'
 # print(STATICFILES_DIRS)
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

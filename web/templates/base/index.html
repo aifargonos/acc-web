@@ -1,4 +1,4 @@
-{% extends "base/base.html" %}
+{% extends "base/basic_page.html" %}
 
 
 {% block title %}Index{% endblock title %}
@@ -9,10 +9,12 @@
 <h1>Index</h1>
 
 This is a small containing serving mainly:
-<ul>
-<li><a href="{% url 'accountancy:index' %}">Accountancy</a></li>
-<li><a href="{% url 'admin:index' %}">Admin</a></li>
-</ul>
+<nav>
+  <ul>
+    <li><a href="{% url 'accountancy:index' %}">Accountancy</a></li>
+    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+  </ul>
+</nav>
 
 Still heavily under construction ...
 
