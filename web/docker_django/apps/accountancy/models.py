@@ -1,6 +1,7 @@
 
 import decimal
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -56,6 +57,7 @@ class Account(models.Model):
         verbose_name_plural = _("accounts")
         ordering = ["name"]
     
+    owner = models.ForeignKey(User, to_field="username", verbose_name=_("owner"))
     name = models.CharField(_("name"), max_length=64, unique=True)
     currency = models.ForeignKey(Currency, verbose_name=_("currency"))
     
