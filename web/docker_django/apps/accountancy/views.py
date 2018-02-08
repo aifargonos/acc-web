@@ -1,8 +1,9 @@
 import io
 import logging
 
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
+from django.shortcuts import render
 
 from .forms import ImportRequestForm
 from .imports import AVAILABLE_IMPORT_METHODS
@@ -14,6 +15,9 @@ def index(request):
 
 
 
+@login_required
+@permission_required('accountancy.add_bill')
+@permission_required('accountancy.add_item')
 def import_view(request):
     log = None
     if request.method == 'POST':
