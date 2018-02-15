@@ -1,0 +1,30 @@
+{% extends "base/basic_page.html" %}
+
+
+{% block title %}Accountancy - Bills{% endblock title %}
+
+
+{% block content %}
+
+<h1>What bills do you want to see?</h1>
+
+<form action="{% url 'accountancy:bills' %}" method="POST">
+  {% csrf_token %}
+  <table>
+    {{ query_form.as_table }}
+  </table>
+  <input type="submit" value="Submit" />
+</form>
+
+<h4>bills:</h4>
+
+<table border="1" style="border-collapse:collapse;">{% for bill in bills %}
+  <tr id="bill-{{ bill.id }}">
+    <td>{{ bill.account }}</td>
+    <td>{{ bill }}</td>
+    <td style="text-align:right;">{{ bill.total }}</td>
+    <td>{{ bill.currency }}</td>
+  </tr>
+{% endfor %}</table>
+
+{% endblock content %}

@@ -6,4 +6,5 @@ app_name = 'accountancy'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^import/$', views.import_view, name='import_view'),
+    url(r'^bills/$', views.bills_view, name='bills'),
 ]

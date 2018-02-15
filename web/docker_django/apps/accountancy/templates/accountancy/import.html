@@ -14,7 +14,9 @@
 
 <form action="{% url 'accountancy:import_view' %}" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ form }}
+  <table>
+    {{ form.as_table }}
+  </table>
   <input type="submit" value="Submit" />
 </form>
 
