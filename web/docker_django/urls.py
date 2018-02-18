@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -10,3 +11,4 @@ urlpatterns = [
     url(r'^acc/', include('docker_django.apps.accountancy.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]
+urlpatterns += staticfiles_urlpatterns()

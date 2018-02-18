@@ -16,15 +16,39 @@
   <input type="submit" value="Submit" />
 </form>
 
-<h4>bills:</h4>
-
-<table border="1" style="border-collapse:collapse;">{% for bill in bills %}
-  <tr id="bill-{{ bill.id }}">
-    <td>{{ bill.account }}</td>
-    <td>{{ bill }}</td>
-    <td style="text-align:right;">{{ bill.total }}</td>
-    <td>{{ bill.currency }}</td>
-  </tr>
-{% endfor %}</table>
-
+{% if items %}
+  <h4>bills:</h4>
+  
+  <div id="bill-list"></div>
+  
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  {% load static %}
+  <script type="text/javascript" src="{% static "accountancy/bills_view.js" %}"></script>
+  
+  {% regroup items by bill as items_by_bill %}
+  
+  <script type='text/javascript'>
+  const bills = {{ "{" }}{% for item_group in items_by_bill %}
+    {{ item_group.grouper.id }}: new Bill(
+      "{{ item_group.grouper.account }}",
+      "{{ item_group.grouper.date|date:"c" }}",
+      "{{ item_group.grouper.account.currency }}",
+      {{ "{" }}{% for item in item_group.list %}
+        {{ item.id }}: new Item(
+          "{{ item.category }}",
+          "{{ item.name }}",
+          "{{ item.comment }}",
+          {{ item.amount }},
+          "{{ item.unit }}",
+          {{ item.unit_price }},
+        ),
+      {% endfor %}{{ "}" }},
+    ),
+  {% endfor %}{{ "}" }}
+  
+  const bill_list = new BillList(bills)
+  document.getElementById('bill-list').appendChild(bill_list.element)
+  </script>
+  
+{% endif %}
 {% endblock content %}

@@ -8,7 +8,7 @@ from django.shortcuts import render
 
 from .forms import BillQueryForm, ImportRequestForm
 from .imports import AVAILABLE_IMPORT_METHODS
-from .models import Bill
+from .models import Bill, Item
 
 
 
@@ -54,6 +54,7 @@ def import_view(request):
 @login_required
 def bills_view(request):
     bills = Bill.objects.none()
+    items = Item.objects.none()
     if request.method == 'POST':
         query_form = BillQueryForm(request.user, request.POST, request.FILES)
         if query_form.is_valid():
@@ -67,6 +68,9 @@ def bills_view(request):
                     date__lte=date_to,
                     account__in=accounts,
                 )
+            
+            items = Item.objects.filter(bill__in=bills).order_by('-bill__date', '-bill__id', 'id')
+            
     else:
         date_to = datetime.datetime.now()
         if date_to.month <= 1:
@@ -74,6 +78,6 @@ def bills_view(request):
         else:
             date_from = date_to.replace(month=date_to.month-1)
         query_form = BillQueryForm(request.user, initial={'date_from': date_from, 'date_to': date_to})
-    return render(request, "accountancy/bills.html", {'query_form': query_form, 'bills': bills})
+    return render(request, "accountancy/bills.html", {'query_form': query_form, 'bills': bills, 'items': items})
 
 
