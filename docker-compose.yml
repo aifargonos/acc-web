@@ -8,7 +8,7 @@ web_dev:
   volumes:
     - ./web:/usr/src/app
     - ./web/static:/usr/src/app/static
-  env_file: .env
+  env_file: web.env
   environment:
     DEBUG: 'true'
   command: /usr/local/bin/gunicorn docker_django.wsgi:application -w 2 -b :8000

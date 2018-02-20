@@ -12,5 +12,6 @@ env
 __pycache__
 .cache
 dev
+/web.env
 /web/static/admin
 /web/db.sqlite3

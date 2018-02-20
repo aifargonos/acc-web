@@ -12,15 +12,26 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from collections import ChainMap
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+
+_env = ChainMap(os.environ, {
+    "SECRET_KEY": "1234f_do%yrca+%l$i+xr^^fh4212*#fd!zz45me6r64-icbi(",
+    "DB_ENGINE": "django.db.backends.sqlite3",
+    "DB_NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    "DB_USER": "",
+    "DB_PASS": "",
+    "DB_SERVICE": "",
+    "DB_PORT": "",
+})
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = _env['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv('DEBUG') == 'true' else False
@@ -85,12 +96,12 @@ WSGI_APPLICATION = 'docker_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ['DB_ENGINE'],
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASS'],
-        'HOST': os.environ['DB_SERVICE'],
-        'PORT': os.environ['DB_PORT']
+        'ENGINE': _env['DB_ENGINE'],
+        'NAME': _env['DB_NAME'],
+        'USER': _env['DB_USER'],
+        'PASSWORD': _env['DB_PASS'],
+        'HOST': _env['DB_SERVICE'],
+        'PORT': _env['DB_PORT']
     }
 }
 

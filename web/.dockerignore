@@ -6,5 +6,4 @@
 .settings
 *.py[cod]
 .cache
-/manage_eclipse.py
 /db.sqlite3
