@@ -1,9 +1,9 @@
-{% load staticfiles %}
 <!doctype html>
 <head>
   <title>{% block title %}{% endblock %}</title>
   <meta charset="utf-8">
 {#  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">#}
+  {% load static %}
   <link rel="stylesheet" href="{% static "main.css" %}">
 </head>
 <body>

@@ -6,4 +6,5 @@
 .settings
 *.py[cod]
 .cache
+/static/*
 /db.sqlite3

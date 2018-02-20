@@ -7,7 +7,7 @@ web_dev:
     - postgres_dev:postgres
   volumes:
     - ./web:/usr/src/app
-    - ./web/static:/usr/src/app/static
+    - /usr/src/app/static
   env_file: web.env
   environment:
     DEBUG: 'true'
