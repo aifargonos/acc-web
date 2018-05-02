@@ -68,7 +68,7 @@ def import_from_INGDiBa(input_file, account, dont_save=True):
 	
 	csv_reader = csv.reader(input_wrap, delimiter=';')
 	
-	_ignore_file_header(csv_reader, 2)
+	_ignore_file_header(csv_reader, 3)
 	
 	_ignore_table_header(csv_reader)
 	
@@ -86,8 +86,8 @@ def import_from_INGDiBa(input_file, account, dont_save=True):
 			'name': line[3],
 			'comment': line[4],
 			'counterparty': line[2],
-			'unit_price': _string2number(line[5]),
-			'balance': _string2number(line[7]),
+			'unit_price': _string2number(line[7]),
+			'balance': _string2number(line[5]),
 		}
 		
 		if not last_date:
